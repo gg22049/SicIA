@@ -32,20 +32,20 @@ from keras.src.models import Model
 
 
 # Separación en semanas
-df = pd.read_csv('data_normalized.csv', header='infer', encoding='latin1')
-def secuenciar (array):
-    x,y,y_bin = [],[],[]
-    sec = 7
-    for i in range (len(array)-sec):
-        x.append(array[i:i + sec, :-1])
-        y.append(array[i + sec, -1])
-        if array[i + sec, -1] > 0:
-            y_bin.append(1)
-        else:
-            y_bin.append(0)
-    return np.array(x), np.array(y),np.array(y_bin)
-
-X,Y,Y_bin = secuenciar(df.values)
+# df = pd.read_csv('data_normalized.csv', header='infer', encoding='latin1')
+# def secuenciar (array):
+#     x,y,y_bin = [],[],[]
+#     sec = 7
+#     for i in range (len(array)-sec):
+#         x.append(array[i:i + sec, :-1])
+#         y.append(array[i + sec, -1])
+#         if array[i + sec, -1] > 0:
+#             y_bin.append(1)
+#         else:
+#             y_bin.append(0)
+#     return np.array(x), np.array(y),np.array(y_bin)
+#
+# X,Y,Y_bin = secuenciar(df.values)
 
 # Modelo
 # epochs = 300
@@ -105,7 +105,7 @@ X,Y,Y_bin = secuenciar(df.values)
 
 # Prueba
 # m = keras.models.load_model("model_alpha.keras")
-#
+
 # for i in range(1,6):
 #     idx = random.randint(0, len(X) - 1)
 #     entrada = X[idx].reshape(1, 7, 7)
@@ -126,24 +126,25 @@ X,Y,Y_bin = secuenciar(df.values)
 #     print(f"Valor real: {y_real[0][0]} mm")
 #     print(f"Precipitación predicha: {prcp_predict[0][0]} mm")
 #     print(f"Error relativo: {error} %")
+#     print(len(X))
 
 # Función para main
-def test():
-    m = keras.models.load_model("model_alpha.keras")
-
-    idx = random.randint(0, len(X) - 1)
-    entrada = X[idx].reshape(1, 7, 7)
-    prediccion = m.predict(entrada)
-
-    prcp_scaler = MinMaxScaler()
-    prcp_scaler.fit(df[['prcp']])
-    prediccion_2d = prediccion[1].reshape(-1, 1)
-    prcp_predict = prcp_scaler.inverse_transform(prediccion_2d)
-    prcp_predict = np.exp(prcp_predict)
-    y = Y[idx].reshape(-1, 1)
-    y_real = prcp_scaler.inverse_transform(y)
-    y_real = np.exp(y_real)
-
-    error = abs((prcp_predict[0][0] - y_real[0][0]) / y_real[0][0]) * 100 if y_real != 0 else 100
-
-    return y_real[0][0], prcp_predict[0][0], error
+# def test():
+#     m = keras.models.load_model("model_alpha.keras")
+#
+#     idx = random.randint(0, len(X) - 1)
+#     entrada = X[idx].reshape(1, 7, 7)
+#     prediccion = m.predict(entrada)
+#
+#     prcp_scaler = MinMaxScaler()
+#     prcp_scaler.fit(df[['prcp']])
+#     prediccion_2d = prediccion[1].reshape(-1, 1)
+#     prcp_predict = prcp_scaler.inverse_transform(prediccion_2d)
+#     prcp_predict = np.exp(prcp_predict)
+#     y = Y[idx].reshape(-1, 1)
+#     y_real = prcp_scaler.inverse_transform(y)
+#     y_real = np.exp(y_real)
+#
+#     error = abs((prcp_predict[0][0] - y_real[0][0]) / y_real[0][0]) * 100 if y_real != 0 else 100
+#
+#     return y_real[0][0], prcp_predict[0][0], error
